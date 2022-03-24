@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block title %}Reference Fetcher{% endblock %}
+{% load static %}
+<!-- {% block extrahead %}<link rel="stylesheet" href="{% static "run/style.css" %}">{% endblock %} -->
+
+{% block content %}
+
+    <p><h4>Reference Fetcher</h4></p>
+
+    <p>
+        The Reference Fetcher provides fast access different bioinformatic references from the Ensembl database.
+    </p>
+    <p>
+        After entering the taxonomic name of the organism you require references for and selecting the type of
+        reference you need the Fetcher will search Ensembl for that reference and provide it to you in form of a download.
+    </p>
+    <p>
+        A list of all available species can be found <a href="{% url 'fetcher:species_list' %}" target="_blank">here</a>.
+    </p>
+    <p>
+        A list of all available Ensembl versions can be found <a href="{% url 'fetcher:version_list' %}" target="_blank">here</a>.
+    </p>
+
+    <form action="." method="post" enctype="multipart/form-data" onsubmit="pop_up('Finding the requested reference may take a moment.\nPlease have patience.')">
+        {% csrf_token %}
+{#        <p>#}
+{#            <label for="id_species">Enter species name: </label>#}
+{#            <input id="id_species" class="ml-4 no-w-bg" type="text" name="species_name">#}
+{#            <small><em>#}
+{##}
+{#            </em></small>#}
+{#        </p>#}
+{##}
+{#        <p>#}
+{#            <label for="id_ensembl_version">Enter the Ensembl version you would like to use: </label>#}
+{#            <input id="id_ensembl_version" class="text-like ml-4" type="number" name="ensembl_version">#}
+{#            <br>#}
+{#            <small><em>#}
+{#                Leave this field empty to download the latest version of the reference.#}
+{#            </em></small>#}
+{#        </p>#}
+{##}
+{#        <p>#}
+{#            <label for="id_selector">Please select the type of reference you would like to fetch:</label>#}
+{#            <select id="id_selector" name="selector">#}
+{#                <option value="gtf">GTF file</option>#}
+{#                <option value="gff3">GFF3 file</option>#}
+{#                <option value="fasta">FASTA file</option>#}
+{#                <option value="fasta_fai">FASTA index files</option>#}
+{#            </select>#}
+{#            <small><em>#}
+{##}
+{#            </em></small>#}
+{#        </p>#}
+
+        <table>
+            <tbody>
+                <tr>
+                    <td class="noBorder"><label class="float-right" for="id_species">Enter species name: </label></td>
+                    <td class="noBorder"><input id="id_species" class="no-w-bg" type="text" name="species_name"></td>
+                </tr>
+                <tr>
+                    <td class="noBorder"><label class="float-right" for="id_ensembl_version">Enter the Ensembl version you would like to use: </label></td>
+                    <td class="noBorder"><input id="id_ensembl_version" class="text-like" type="number" name="ensembl_version"></td>
+                </tr>
+                <tr><td class="noBorder" colspan="2">
+                    <small><em class="float-right">
+                        Leave this field empty to download the latest version of the reference.
+                    </em></small>
+                </td></tr>
+                <tr>
+                    <td class="noBorder"><label class="float-right" for="id_selector">Please select the type of reference you would like to fetch:</label></td>
+                    <td class="noBorder">
+                        <select id="id_selector" name="selector">
+                            <option value="gtf">GTF file</option>
+                            <option value="gff3">GFF3 file</option>
+                            <option value="fasta">FASTA file</option>
+                            <option value="fasta_fai">FASTA index files</option>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+{#        <div id="id_chromosome_selector" style="display: none">#}
+{#            <select>#}
+{#            #}
+{#            </select>#}
+{#        </div>#}
+        <br>
+        <button type="submit" name="fetch_reference">Fetch!</button>
+    </form>
+
+    <script>
+        function pop_up(display_text) {
+            alert(display_text);
+        }
+
+        {#document.onload {#}
+        {#    const selector = document.getElementById("id_selector")#}
+        {#    const chromosome_selector = document.getElementById("id_chromosome_selector")#}
+        {##}
+        {#    if (selector.value === "fasta"#}
+        {##}
+        {#    chromosome_selector.style.display = "none";}#}
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const selector = document.getElementById("id_selector");
+
+            selector.addEventListener("change", () => {
+                const chromosome_selector = document.getElementById("id_chromosome_selector");
+                if (selector.value === "fasta") {
+                    chromosome_selector.style.display = "block";
+                } else {
+                    chromosome_selector.style.display = "none";
+                }
+            })
+        })
+    </script>
+
+{% endblock %}

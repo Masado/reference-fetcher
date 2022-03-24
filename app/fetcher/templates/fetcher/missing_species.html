@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Species not found{% endblock %}
+{% load static %}
+
+{% block content %}
+
+    <p><h4>Entered a non valid species</h4></p>
+
+    <p>
+        You are looking for a refernce for a species not available in our Ensembl list.
+    </p>
+    <p>
+        The button below will take you back to the previous page.
+    </p>
+    <p>
+        <a href="http://0.0.0.0:8000/list/" target="_blank">Here</a> a list of all species available can be found.
+    </p>
+
+
+    <p style="padding: 0 7em 2em 0;">
+        <input class="back-button" type="button" onclick="history.back();" value="Take me back">
+    </p>
+
+
+{% endblock %}

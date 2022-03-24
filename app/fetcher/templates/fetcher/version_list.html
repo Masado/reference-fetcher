@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}Ensembl version List{% endblock %}
+{% load static %}
+<!-- {% block extrahead %}<link rel="stylesheet" href="{% static "run/style.css" %}">{% endblock %} -->
+
+{% block content %}
+
+    <p><h4>Available Ensembl version list</h4></p>
+
+
+    {% if version_list %}
+        <div class="center">
+        <table id="version_table">
+            <thead>
+                <tr>
+                    <th><input type="text" class="search-input" placeholder="Version"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for version in version_list %}
+                <tr>
+                    <td>{{ version }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    {% else %}
+        <p>You should not be seeing this. If you are seeing this, something is going wrong.</p>
+    {% endif %}
+
+
+    <p style="padding: 0 7em 2em 0;">
+        <input class="back-button" type="button" onclick="history.back();" value="Take me back">
+    </p>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll(".search-input").forEach(inputField => {
+                const tableRows = inputField.closest("table").querySelectorAll("tbody tr");
+                const headerCell = inputField.closest("th");
+                const otherHeaderCells = inputField.closest("tr").querySelectorAll("th");
+                const columnIndex = Array.from(otherHeaderCells).indexOf(headerCell);
+                const searchableCells = Array.from(tableRows)
+                    .map(row => row.querySelectorAll("td")[columnIndex])
+
+                inputField.addEventListener("input", () => {
+                    const searchQuery = inputField.value.toLowerCase();
+
+                    for (const tableCell of searchableCells) {
+                        const row = tableCell.closest("tr");
+                        const value = tableCell.textContent
+                            .toLowerCase()
+                            .replace(",", "");
+
+                        row.style.visibility = null;
+
+                        if (value.search(searchQuery) === -1) {
+                            row.style.visibility = "collapse";
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+
+
+{% endblock %}
